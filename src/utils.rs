@@ -73,6 +73,31 @@ impl From<GamepadTextInputLineMode> for sys::EGamepadTextInputLineMode {
     }
 }
 
+/// The Steam hardware device the game is running on, if any.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum SteamHardwareType {
+    None,
+    SteamDeck,
+    SteamMachine,
+    SteamFrame,
+    /// A device type newer than this version of the crate knows about.
+    Unknown(sys::ESteamHardwareType),
+}
+
+impl From<sys::ESteamHardwareType> for SteamHardwareType {
+    fn from(hardware: sys::ESteamHardwareType) -> Self {
+        match hardware {
+            sys::ESteamHardwareType::k_ESteamHardwareTypeNone => SteamHardwareType::None,
+            sys::ESteamHardwareType::k_ESteamHardwareTypeSteamDeck => SteamHardwareType::SteamDeck,
+            sys::ESteamHardwareType::k_ESteamHardwareTypeSteamMachine => {
+                SteamHardwareType::SteamMachine
+            }
+            sys::ESteamHardwareType::k_ESteamHardwareTypeSteamFrame => SteamHardwareType::SteamFrame,
+            other => SteamHardwareType::Unknown(other),
+        }
+    }
+}
+
 pub enum FloatingGamepadTextInputMode {
     SingleLine,
     MultipleLines,
@@ -231,9 +256,17 @@ impl Utils {
         unsafe { sys::SteamAPI_ISteamUtils_IsSteamInBigPictureMode(self.utils) }
     }
 
+    /// Returns which Steam hardware device the game is running on, if any.
+    pub fn is_running_on_steam_hardware(&self) -> SteamHardwareType {
+        unsafe { sys::SteamAPI_ISteamUtils_IsRunningOnSteamHardware(self.utils).into() }
+    }
+
     /// Checks if Steam is running on a Steam Deck device.
+    #[deprecated(
+        note = "use `is_running_on_steam_hardware`; IsSteamRunningOnSteamDeck was removed from the flat API in SDK 1.65"
+    )]
     pub fn is_steam_running_on_steam_deck(&self) -> bool {
-        unsafe { sys::SteamAPI_ISteamUtils_IsSteamRunningOnSteamDeck(self.utils) }
+        self.is_running_on_steam_hardware() == SteamHardwareType::SteamDeck
     }
 
     /// Activates the Big Picture text input dialog which only supports gamepad input.
