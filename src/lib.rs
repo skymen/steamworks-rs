@@ -343,7 +343,7 @@ impl Client {
     /// Returns an accessor to the steam utils interface
     pub fn utils(&self) -> Utils {
         unsafe {
-            let utils = sys::SteamAPI_SteamUtils_v010();
+            let utils = sys::SteamAPI_SteamUtils_v011();
             debug_assert!(!utils.is_null());
             Utils {
                 utils: utils,
@@ -367,7 +367,7 @@ impl Client {
     /// Returns an accessor to the steam matchmaking_servers interface
     pub fn matchmaking_servers(&self) -> MatchmakingServers {
         unsafe {
-            let mm = sys::SteamAPI_SteamMatchmakingServers_v002();
+            let mm = sys::SteamAPI_SteamMatchmakingServers_v003();
             debug_assert!(!mm.is_null());
             MatchmakingServers {
                 mms: mm,
@@ -391,7 +391,7 @@ impl Client {
     /// Returns an accessor to the steam apps interface
     pub fn apps(&self) -> Apps {
         unsafe {
-            let apps = sys::SteamAPI_SteamApps_v008();
+            let apps = sys::SteamAPI_SteamApps_v009();
             debug_assert!(!apps.is_null());
             Apps {
                 apps: apps,
@@ -415,7 +415,7 @@ impl Client {
     /// Returns an accessor to the steam input interface
     pub fn input(&self) -> Input {
         unsafe {
-            let input = sys::SteamAPI_SteamInput_v006();
+            let input = sys::SteamAPI_SteamInput_v007();
             debug_assert!(!input.is_null());
             Input {
                 input,
@@ -451,7 +451,7 @@ impl Client {
     /// Returns an accessor to the steam remote play interface
     pub fn remote_play(&self) -> RemotePlay {
         unsafe {
-            let rp = sys::SteamAPI_SteamRemotePlay_v003();
+            let rp = sys::SteamAPI_SteamRemotePlay_v004();
             debug_assert!(!rp.is_null());
             RemotePlay {
                 rp,
@@ -465,7 +465,7 @@ impl Client {
         unsafe {
             let rs = sys::SteamAPI_SteamRemoteStorage_v016();
             debug_assert!(!rs.is_null());
-            let util = sys::SteamAPI_SteamUtils_v010();
+            let util = sys::SteamAPI_SteamUtils_v011();
             debug_assert!(!util.is_null());
             RemoteStorage {
                 rs,
@@ -525,7 +525,7 @@ impl Client {
 
     pub fn networking_sockets(&self) -> networking_sockets::NetworkingSockets {
         unsafe {
-            let sockets = sys::SteamAPI_SteamNetworkingSockets_SteamAPI_v012();
+            let sockets = sys::SteamAPI_SteamNetworkingSockets_SteamAPI_v013();
             debug_assert!(!sockets.is_null());
             networking_sockets::NetworkingSockets {
                 sockets,

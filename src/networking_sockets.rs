@@ -472,14 +472,17 @@ impl ListenSocket {
         &self,
         messages: impl IntoIterator<Item = NetworkingMessage>,
     ) -> Vec<SResult<MessageNumber>> {
-        let messages: Vec<_> = messages.into_iter().map(|x| x.take_message()).collect();
+        let mut messages: Vec<_> = messages.into_iter().map(|x| x.take_message()).collect();
         let mut results = vec![0; messages.len()];
         unsafe {
+            // bDeleteFailedMessages = true: the library owns every message, failed ones included,
+            // which is what this function has always promised its callers.
             sys::SteamAPI_ISteamNetworkingSockets_SendMessages(
                 self.inner.sockets,
                 messages.len() as _,
-                messages.as_ptr(),
+                messages.as_mut_ptr(),
                 results.as_mut_ptr(),
+                true,
             );
             // Error codes are returned as negative numbers, while positive numbers are message numbers
             results
